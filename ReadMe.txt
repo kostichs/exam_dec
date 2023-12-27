@@ -1,0 +1,1 @@
+It launches via allure serve tests\allure_results
