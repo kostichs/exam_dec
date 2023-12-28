@@ -107,6 +107,28 @@ class ApiPet:
         self.response = requests.put(self.url + url, json=self.body)
         return self.response.status_code
 
+    def update_form_data(self, url: str, _id: str, name: str, status: str):
+        data = dict(
+            id=(None, _id),
+            name=(None, name),
+            status=(None, status),
+        )
+        self.body["id"] = int(_id)
+        self.body["name"] = name
+        self.body["status"] = status
+        form = {'id': _id, 'name': name, 'status': status}
+        #self.response = requests.post(self.url + url + str(_id), files=data)
+        #print(self.url + url + str(_id))
+
+        # print(self.response.prepare().body.decode("utf-8"))
+        self.response = requests.Request('POST', self.url + url + str(_id), json=self.body)
+        print(self.response)
+        print(self.response.prepare().body.decode("utf-8"))
+        response = requests.Session().send(self.response.prepare())
+        print(response.status_code)
+        print(response.text)
+        return self.response
+
     def get_pet_status(self, url: str, status: str):
         """Looks for pet by status: available, pending or sold"""
         self.response = requests.get(self.url + url + '?status=' + status)

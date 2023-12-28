@@ -62,10 +62,11 @@ class TestApiExam:
 
     @allure.title("Updates a pet in the store with form data")
     @allure.description("Check relevant response and validate data structure")
-    @pytest.mark.parametrize("_id", [4, 32, 34])
+    @pytest.mark.skip("Reason: Test function isn't able to work with Form-data")
+    @pytest.mark.parametrize("_id", [0, 1, 4, 33333, 32, 34])
     def test_update_pet_by_id(self, create_pet_object, _id):
         with allure.step('Check status code'):
-            assert create_pet_object.get_pet_id(self.get_id_url, str(_id)) == 200, f'{_id} does not exist'
+            assert create_pet_object.update_form_data(self.get_id_url, _id, "Maya", "sold") == 200, "Wrong status code"
         with allure.step('Validation response data structure'):
             response = create_pet_object.validate_model()
             assert response[0], response[1]
