@@ -18,7 +18,7 @@ class TestApiExam:
         with allure.step('Check status code'):
             assert create_pet_object.connect(self.add_url, _id) == 200, "Invalid connection response"
         with allure.step('Check data structure'):
-            response = create_pet_object.validate_model()
+            response = create_pet_object.validate_model(is_list=False)
             assert response[0], response[1]
 
     @allure.title("Connection to update an existing pet")
@@ -29,7 +29,7 @@ class TestApiExam:
         with allure.step('Check status code'):
             assert create_pet_object.change(self.add_url, _id, name) == 200, "Invalid connection response"
         with allure.step('Check data structure'):
-            response = create_pet_object.validate_model()
+            response = create_pet_object.validate_model(is_list=False)
             assert response[0], response[1]
 
     @allure.title("Connection to find pets by status")
@@ -39,7 +39,8 @@ class TestApiExam:
         with allure.step("check status code"):
             assert create_pet_object.get_pet_status(self.url_status, status) == 200, "Invalid connection response"
         with allure.step('Check data structure'):
-            response = create_pet_object.validate_model_pets()
+            # response = create_pet_object.validate_model_pets()
+            response = create_pet_object.validate_model(is_list=True)
             assert response[0], response[1]
 
     @allure.title("Connection to find pets by id")
@@ -49,7 +50,7 @@ class TestApiExam:
         with allure.step("check status code"):
             assert create_pet_object.get_pet_id(self.get_id_url, str(_id)) == 200, "Invalid connection response"
         with allure.step('Check data structure'):
-            response = create_pet_object.validate_model()
+            response = create_pet_object.validate_model(is_list=False)
             assert response[0], response[1]
 
     @allure.title("Connection to find pets by invalid id")
@@ -67,7 +68,7 @@ class TestApiExam:
         with allure.step('Check status code'):
             assert create_pet_object.get_pet_id(self.get_id_url, str(_id)) == 200, f'{_id} does not exist'
         with allure.step('Validation response data structure'):
-            response = create_pet_object.validate_model()
+            response = create_pet_object.validate_model(is_list=False)
             assert response[0], response[1]
 
     @allure.title("Delete a pet from the store")
