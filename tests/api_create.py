@@ -1,9 +1,7 @@
 import requests
 from pydantic import BaseModel, ValidationError, field_validator
-import samples
-import json
 from enum import Enum
-from typing import Union, Optional, Any
+from typing import Optional
 
 
 class PetEnum(Enum):
@@ -67,11 +65,13 @@ class ApiPet:
         self.body = self.__class__.body
 
     def connect(self, url, _id):
+        """Connects to the server by id"""
         self.body["id"] = _id
         self.response = requests.post(self.url + url, json=self.body)
         return self.response.status_code
 
     def validate_model(self):
+        """Validates response.json according to the documentation Body"""
         try:
             Pet.model_validate(self.response.json())
         except AssertionError as e:
@@ -94,71 +94,43 @@ class ApiPet:
             return True, None
 
     def change(self, url: str, _id: int, name: str):
+        """Using requests.put to change the pet data"""
         self.body["id"] = _id
         self.body["name"] = name
         self.response = requests.put(self.url + url, json=self.body)
         return self.response.status_code
 
     def get_pet_status(self, url: str, status: str):
+        """Looks for pet by status: available, pending or sold"""
         self.response = requests.get(self.url + url + '?status=' + status)
         # r'https://petstore.swagger.io/v2/pet/findByStatus?status=available'
-        # print(self.response.json())
         return self.response.status_code
 
     def get_pet_id(self, url: str, _id: str):
+        """Looks for pet by id"""
         self.response = requests.get(f'{self.url}{url}{_id}')
         return self.response.status_code
 
     def post_by_id(self, url: str, _id: str, status: str, name: str):
+        """Change pet datas by id"""
         self.body["status"] = status
         self.body["name"] = name
         self.response = requests.post(f'{self.url}{url}{_id}', json=self.body)
         print(self.response.json())
         return self.response.status_code
 
-    def delete_by_id(self, url: str, _id):
+    def delete_by_id(self, url: str, _id) -> int:
+        """Deletes pet by id"""
         self.response = requests.delete(f'{self.url}{url}{_id}')
         return self.response.status_code
 
-'''    def validate_post_by_id(self) -> Union[bool, Any]:
+    '''def validate_post_by_id(self) -> Union[bool, Any]:
+            """It doesn't work. According to the documentation, this post request should return a body with 3 fields.
+            However, I could not deal with it"""
         try:
             UpdBody.model_validate(self.response.json())
         except AssertionError as e:
             return False, e
         else:
             return True, None
-'''
-
-
-
-
-
-
-
-
-'''
-    def connect_add_pet(self, url, sample):
-        self.response = requests.post(self.url + url, json=sample)
-        return self.response.status_code
-
-    def connect_add_pet_invalid(self, url):
-        self.response = requests.post(self.url + url, json=samples.invalid_sample_add)
-        return self.response.status_code
-
-    def connect_update_pet(self, url):
-        self.response = requests.post(self.url + url, json=samples.valid_sample_update)
-        return self.response.status_code
-
-    def connect_put_pet(self, url):
-        self.response = requests.put(self.url + url, json=samples.valid_sample_add)
-        return self.response.status_code
-
-
-
-    def connect_get_pet(self, url):
-        self.response = requests.get(self.url + url)
-        return self.response.status_code
-
-    def delete_pet(self, url):
-        self.response = requests.delete(self.url + url)
-        return self.response.status_code'''
+    '''
