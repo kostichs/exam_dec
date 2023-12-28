@@ -1,7 +1,7 @@
 import random
 
 import requests
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, ValidationError, field_validator, HttpUrl
 from enum import Enum
 from typing import Union, Optional
 
@@ -32,6 +32,7 @@ class Pet(BaseModel):
 
 
 class Pets(BaseModel):
+    """Doesn't work"""
     body: list[Optional[Pet]] = None
 
 
@@ -72,17 +73,12 @@ class ApiPet:
         self.response = requests.post(self.url + url, json=self.body)
         return self.response.status_code
 
-    def validate_model(self, is_list: bool):
+    def validate_model(self):
         """Validates response.json according to the documentation Body.
         There can be a piece of Pet data or list of Pet objects.
         Validation of the list of Pets doesn't work at me, so, it is used here only one of the elements of the list"""
-        if is_list:
-            element = random.randint(0, len(self.response.json())-1)
-            jsondata = self.response.json()[element]
-        else:
-            jsondata = self.response.json()
         try:
-            Pet.model_validate(jsondata)
+            Pet.model_validate(self.response.json())
         except AssertionError as e:
             return False, e
         except ValidationError as e:
@@ -92,7 +88,7 @@ class ApiPet:
 
     def validate_model_pets(self):
         """Внимание: здесь проблема, не получилось сделать проверку на список Pet, все время провал.
-        Поэтому я беру просто первый элемент этого списка для каждого статуса"""
+        Поэтому я беру каждый элемент списка для валидации модели"""
         for el in range(len(self.response.json())):
             try:
                 Pet.model_validate(self.response.json()[el])
