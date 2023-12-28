@@ -1,1 +1,0 @@
-{"uuid": "0f70c864-90e1-4e54-b1ab-400aedbc1c95", "children": ["627d2adf-8ef2-4473-b3ac-45e888d9c585"], "befores": [{"name": "create_pet_object", "status": "passed", "start": 1703710488337, "stop": 1703710488337}], "afters": [{"name": "create_pet_object::0", "status": "passed", "start": 1703710489086, "stop": 1703710489086}], "start": 1703710488337, "stop": 1703710489086}

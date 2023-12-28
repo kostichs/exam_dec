@@ -1,7 +1,7 @@
 import requests
 from pydantic import BaseModel, ValidationError, field_validator
 from enum import Enum
-from typing import Optional
+from typing import Union, Optional
 
 
 class PetEnum(Enum):
@@ -26,7 +26,7 @@ class Pet(BaseModel):
     name: Optional[str] = None
     photoUrls: Optional[list[str]] = None
     tags: Optional[list[Tags]] = None
-    status: Optional[str] = None
+    status: Union[PetEnum]
 
 
 class Pets(BaseModel):
