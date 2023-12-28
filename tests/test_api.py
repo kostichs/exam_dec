@@ -80,9 +80,8 @@ class TestApiExam:
 
     @allure.title("Delete a pet from the store")
     @allure.description("Check relevant response")
-    @pytest.mark.xfail(strict=True)
     @pytest.mark.parametrize("_id", [4, 32, 34])
     def test_delete_non_existed_pet(self, create_pet_object, _id):
         with allure.step('Check status code'):
-            assert create_pet_object.delete_by_id(self.get_id_url, str(_id)) == 200, f'{_id} still exists'
+            assert create_pet_object.delete_by_id(self.get_id_url, str(_id)) == 404, f'{_id} still exists'
 
