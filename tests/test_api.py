@@ -54,7 +54,7 @@ class TestApiExam:
 
     @allure.title("Connection to find pets by invalid id")
     @allure.description("Check relevant response and validate data structure")
-    @pytest.mark.xfail
+    @pytest.mark.xfail(strict=True)
     @pytest.mark.parametrize("_id", [0, -222, 0000, -1])
     def test_get_by_invalid_id(self, create_pet_object, _id):
         with allure.step("check status code"):
@@ -78,7 +78,7 @@ class TestApiExam:
         with allure.step('Check status code'):
             assert create_pet_object.delete_by_id(self.get_id_url, str(_id)) == 200, f'{_id} does not exist'
 
-    @allure.title("Delete a pet from the store")
+    @allure.title("Delete a pet from the store again")
     @allure.description("Check relevant response")
     @pytest.mark.parametrize("_id", [4, 32, 34])
     def test_delete_non_existed_pet(self, create_pet_object, _id):

@@ -108,6 +108,7 @@ class ApiPet:
         return self.response.status_code
 
     def update_form_data(self, url: str, _id: str, name: str, status: str):
+        """Функция должна была работать с дата формой, но что-то пошло не так, мне все время возвращается ответ 415."""
         data = dict(
             id=(None, _id),
             name=(None, name),
@@ -117,17 +118,14 @@ class ApiPet:
         self.body["name"] = name
         self.body["status"] = status
         form = {'id': _id, 'name': name, 'status': status}
-        #self.response = requests.post(self.url + url + str(_id), files=data)
-        #print(self.url + url + str(_id))
+        # self.response = requests.post(self.url + url + str(_id), files=data)
+        # self.response = requests.post(self.url + url + str(_id), files=form)
+        # self.response = requests.Request('POST', self.url + url + str(_id), json=self.body)
 
-        # print(self.response.prepare().body.decode("utf-8"))
-        self.response = requests.Request('POST', self.url + url + str(_id), json=self.body)
-        print(self.response)
-        print(self.response.prepare().body.decode("utf-8"))
+        self.response = requests.Request('POST', self.url + url + str(_id), files=self.body)
+        self.response.prepare()
         response = requests.Session().send(self.response.prepare())
-        print(response.status_code)
-        print(response.text)
-        return self.response
+        return response.status_code
 
     def get_pet_status(self, url: str, status: str):
         """Looks for pet by status: available, pending or sold"""
