@@ -38,9 +38,11 @@ class TestApiExam:
     def test_get_pet_by_status(self, create_pet_object, status):
         with allure.step("check status code"):
             assert create_pet_object.get_pet_status(self.url_status, status) == 200, "Invalid connection response"
-        with allure.step('Check data structure'):
-            # response = create_pet_object.validate_model_pets()
+        '''with allure.step('Check data structure'):
             response = create_pet_object.validate_model(is_list=True)
+            assert response[0], response[1]'''
+        with allure.step('Check every element of the list of Pets by every status'):
+            response = create_pet_object.validate_model_pets()
             assert response[0], response[1]
 
     @allure.title("Connection to find pets by id")

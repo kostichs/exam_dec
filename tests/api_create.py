@@ -93,14 +93,16 @@ class ApiPet:
     def validate_model_pets(self):
         """Внимание: здесь проблема, не получилось сделать проверку на список Pet, все время провал.
         Поэтому я беру просто первый элемент этого списка для каждого статуса"""
-        try:
-            Pet.model_validate(self.response.json()[0])
-        except AssertionError as e:
-            return False, e
-        except ValidationError as e:
-            return False, e
-        else:
-            return True, None
+        for el in range(len(self.response.json())):
+            try:
+                Pet.model_validate(self.response.json()[el])
+            except AssertionError as e:
+                return False, e
+            except ValidationError as e:
+                return False, e
+            else:
+                continue
+        return True, None
 
     def change(self, url: str, _id: int, name: str):
         """Using requests.put to change the pet data"""
