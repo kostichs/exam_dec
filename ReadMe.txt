@@ -1,4 +1,4 @@
-It launches via allure serve tests\allure_results
+pytest -vs --alluredir=reports
 
 1. Все тесты лежат в файле test_api.py
 
