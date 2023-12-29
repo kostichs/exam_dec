@@ -3,6 +3,8 @@ import pytest
 
 
 class TestApiExam:
+    """Class contains test functions sending requests to create an object Pet via fixture and receiving response
+    from it to check the connection response and validation accordance with several parameters."""
     url_base = 'https://petstore.swagger.io/v2'
 
     def setup_class(self):

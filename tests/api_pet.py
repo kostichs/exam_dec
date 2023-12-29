@@ -5,7 +5,8 @@ from models import Pet
 
 
 class ApiPet:
-
+    """Class contains methods to connect and send different requests to the server. There is a validation functions here
+    as well, that checks if the response bodies matches to the expected model Pet. """
     def __init__(self, url: str):
         self.url = url
         self.response = None
